@@ -259,3 +259,24 @@ resource "google_monitoring_notification_channel" "email" {
   }
   force_delete = false
 }
+
+# Remote backend bucket oluşturulması
+
+provider "google" {
+  project     = "terraform-project-416712"
+  region      = "europe-west1"
+}
+resource "google_storage_bucket" "test-bucket-for-state" {
+  name        = "terraform-project-416712"
+  location    = "EU" # Replace with EU for Europe region
+  uniform_bucket_level_access = false
+  versioning {
+    enabled = true
+  }
+}
+terraform {
+  backend "gcs" {
+    bucket  = "terraform-project-416712"
+    prefix  = "terraform/state"
+  }
+}
